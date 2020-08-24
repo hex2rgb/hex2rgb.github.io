@@ -34,3 +34,19 @@
     line-height: 45px;
     box-sizing: border-box;
 }
+
+.post-archive {
+    margin: 40px;
+}
+
+.post-archive h2 {
+    font-size: 25px;
+}
+
+.post-archive li {
+    margin: 15px 0;
+}
+
+#profile .inner .base-info #follow {
+    background-color: #1dc897;
+}
