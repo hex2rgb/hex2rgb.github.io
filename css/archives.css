@@ -1,0 +1,11 @@
+.post-archive {
+    margin: 40px;
+}
+
+.post-archive h2 {
+    font-size: 25px;
+}
+
+.post-archive li {
+    margin: 15px 0;
+}
