@@ -17,7 +17,7 @@
             },
             tooltip: {},
             legend: {
-                data: [year + 'PV']
+                data: [year + '年PV']
             },
             xAxis: {
                 type: 'category',
@@ -28,7 +28,7 @@
                 type: 'value'
             },
             series: [{
-                name: year + 'PV',
+                name: year + '年PV',
                 data: data,
                 type: 'line',
                 areaStyle: {}
