@@ -4,7 +4,7 @@
     var startDate = year + '0101';
     var endDate = year + '1201';
     var api = app.chartApi + "&start_date=" + startDate + "&end_date=" + endDate;
-    
+
     $.get(api).done(function (res) {
         console.log(JSON.parse(res))
         var data = JSON.parse(res).result.items[1].reverse().map((item) => item[0]);
