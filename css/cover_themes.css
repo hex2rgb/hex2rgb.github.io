@@ -38,3 +38,10 @@
 #profile .inner .base-info #follow {
     background-color: #1dc897;
 }
+
+.tagcloud a {
+    display: inline-block;
+    background-color: #f3f3f3;
+    padding: 0 2px;
+    border-radius: 4px;
+}
