@@ -52,10 +52,3 @@ code {
     padding: 0;
     font-size: 14px;
 }
-
-.article-more-link a:hover {
-    background: #1dc897;
-    color: #fff;
-    text-decoration: none;
-    text-shadow: 0 1px #1debb9;
-}
