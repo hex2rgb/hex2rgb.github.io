@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>npm on R</title><link>https://robert196.github.io/tags/npm/</link><description>Recent content in npm on R</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 17 May 2018 18:05:10 +0800</lastBuildDate><atom:link href="https://robert196.github.io/tags/npm/index.xml" rel="self" type="application/rss+xml"/><item><title>Npm配置以及常用命令</title><link>https://robert196.github.io/2018/05/17/npm%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</link><pubDate>Thu, 17 May 2018 18:05:10 +0800</pubDate><guid>https://robert196.github.io/2018/05/17/npm%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</guid><description>npm 初始化 npm install -g
+@vue/cli-service-global
+create-react-app
+pm2
+nodemon
+express-generator
+gulp-cli
+@vue/cli \
+npm配置 access = null also = null always-auth = false bin-links = true browser = null ca = null cache = &amp;ldquo;C:\Users\robert\AppData\Roaming\npm-cache&amp;rdquo; cache-lock-retries = 10 cache-lock-stale = 60000 cache-lock-wait = 10000 cache-max = null cache-min = 10 cafile = undefined cert = null color = true depth = null description = true dev = false dry-run = false editor = &amp;ldquo;notepad.</description></item></channel></rss>
