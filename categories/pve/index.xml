@@ -1,1 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>pve on R</title><link>https://robert196.github.io/categories/pve/</link><description>Recent content in pve on R</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 21 Apr 2020 18:09:16 +0800</lastBuildDate><atom:link href="https://robert196.github.io/categories/pve/index.xml" rel="self" type="application/rss+xml"/><item><title>Proxmox硬盘直通</title><link>https://robert196.github.io/2020/04/21/proxmox%E7%A1%AC%E7%9B%98%E7%9B%B4%E9%80%9A/</link><pubDate>Tue, 21 Apr 2020 18:09:16 +0800</pubDate><guid>https://robert196.github.io/2020/04/21/proxmox%E7%A1%AC%E7%9B%98%E7%9B%B4%E9%80%9A/</guid><description># 查询硬盘列表 ls /dev/disk/by-id # 希捷500G qm set 100 -sata1 /dev/disk/by-id/ata-ST500LM021-1KJ152_W62BER60 # 日立4T 1 qm set 100 -sata2 /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK1334PEJNHADS # 日立4T 2 qm set 100 -sata3 /dev/disk/by-id/ata-MB4000GCWLV_P4G5RGEB # 日立6T qm set 100 -sata4 /dev/disk/by-id/ata-HGST_HUS726060ALA640_AR11021EGAWD2B # 东芝500G（未使用） qm set 100 -sata4 /dev/disk/by-id/ata-MB4000GCWLV_P4G5RGEB 如果返回以下信息,说明已成功挂载 update VM 100: -sata1 /dev/disk/by-id/ata-WDC_WDXXXX_XXXX_XXXX</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>pve on R</title><link>https://robert196.github.io/categories/pve/</link><description>Recent content in pve on R</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 21 Apr 2020 18:09:16 +0800</lastBuildDate><atom:link href="https://robert196.github.io/categories/pve/index.xml" rel="self" type="application/rss+xml"/><item><title>Proxmox硬盘直通</title><link>https://robert196.github.io/2020/04/21/proxmox%E7%A1%AC%E7%9B%98%E7%9B%B4%E9%80%9A/</link><pubDate>Tue, 21 Apr 2020 18:09:16 +0800</pubDate><guid>https://robert196.github.io/2020/04/21/proxmox%E7%A1%AC%E7%9B%98%E7%9B%B4%E9%80%9A/</guid><description>&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">&lt;span style="color:#75715e"># 查询硬盘列表&lt;/span>
+ls /dev/disk/by-id
+&lt;span style="color:#75715e"># 希捷500G&lt;/span>
+qm set &lt;span style="color:#ae81ff">100&lt;/span> -sata1 /dev/disk/by-id/ata-ST500LM021-1KJ152_W62BER60
+&lt;span style="color:#75715e"># 日立4T 1&lt;/span>
+qm set &lt;span style="color:#ae81ff">100&lt;/span> -sata2 /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK1334PEJNHADS
+&lt;span style="color:#75715e"># 日立4T 2&lt;/span>
+qm set &lt;span style="color:#ae81ff">100&lt;/span> -sata3 /dev/disk/by-id/ata-MB4000GCWLV_P4G5RGEB
+&lt;span style="color:#75715e"># 日立6T&lt;/span>
+qm set &lt;span style="color:#ae81ff">100&lt;/span> -sata4 /dev/disk/by-id/ata-HGST_HUS726060ALA640_AR11021EGAWD2B
+&lt;span style="color:#75715e"># 东芝500G（未使用）&lt;/span>
+qm set &lt;span style="color:#ae81ff">100&lt;/span> -sata4 /dev/disk/by-id/ata-MB4000GCWLV_P4G5RGEB
+如果返回以下信息,说明已成功挂载
+update VM 100: -sata1 /dev/disk/by-id/ata-WDC_WDXXXX_XXXX_XXXX
+&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
