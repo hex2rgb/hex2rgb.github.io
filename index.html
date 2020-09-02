@@ -57,19 +57,11 @@
 &#183;
 <a class=article-category-link href=https://robert196.github.io/tags/frp>frp</a></div></div></header><div class=article-entry itemprop=articleBody><p>客户端配置 [common] server_addr = 106.12.207.57 #远程ip server_port = 7000 # 远程端口 [ssh] type = tcp local_ip = 127.0.0.1 local_port = 22 remote_port = 6000 # 远程登录端口 [web] type = http local_port = 80 # 本地服务端口 custom_domains = 106.12.207.57 服务端配置 [common] bind_port = 7000 # 监听端口 vhost_http_port = 8090 # web端口 登录示例 ssh -p 6000 root@106.12.207.57</p><p class=article-more-link><a href=https://robert196.github.io/2018/06/01/%E6%90%AD%E5%BB%BAfrp%E7%94%A8%E4%BD%9C%E5%86%85%E7%BD%91ssh%E7%A9%BF%E9%80%8F/>阅读更多</a></p></div></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner></a><header class=article-header><a href=https://robert196.github.io/2016/05/17/npm%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/><h1 class=article-title itemprop=name>Npm配置以及常用命令</h1></a><div class=article-meta><div class=article-date><i class="fa fa-calendar"></i><time datetime="2016-05-17 18:05:10 +0800 +0800" itemprop=datePublished>2016-05-17</time>
 &#183;
-555
+244
 个字
 &#183;
-3
-分钟 读完</div><div class=article-category><i class="fa fa-folder"></i><a class=article-category-link href=https://robert196.github.io/categories/%E5%89%8D%E7%AB%AF>前端</a></div><div class=article-category><i class="fa fa-tags"></i><a class=article-category-link href=https://robert196.github.io/tags/npm>npm</a></div></div></header><div class=article-entry itemprop=articleBody><p>npm 初始化 npm install -g
-@vue/cli-service-global
-create-react-app
-pm2
-nodemon
-express-generator
-gulp-cli
-@vue/cli \
-npm配置 access = null also = null always-auth = false bin-links = true browser = null ca = null cache = &ldquo;C:\Users\robert\AppData\Roaming\npm-cache&rdquo; cache-lock-retries = 10 cache-lock-stale = 60000 cache-lock-wait = 10000 cache-max = null cache-min = 10 cafile = undefined cert = null color = true depth = null description = true dev = false dry-run = false editor = &ldquo;notepad.</p><p class=article-more-link><a href=https://robert196.github.io/2016/05/17/npm%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/>阅读更多</a></p></div></div></article><nav id=page-nav></nav></section></div></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2020
+2
+分钟 读完</div><div class=article-category><i class="fa fa-folder"></i><a class=article-category-link href=https://robert196.github.io/categories/%E5%89%8D%E7%AB%AF>前端</a></div><div class=article-category><i class="fa fa-tags"></i><a class=article-category-link href=https://robert196.github.io/tags/npm>npm</a></div></div></header><div class=article-entry itemprop=articleBody><p>npm 初始化 npm install -g \ @vue/cli-service-global \ create-react-app \ pm2 \ nodemon \ express-generator \ gulp-cli \ @vue/cli npm install 只安装dependencies linux & mac: export NODE_ENV=production windows: set NODE_ENV=development //默认值 production为不下载dev export NODE_ENV=production npm install --save 切换源 npm install -g cnpm --registry=https://registry.npm.taobao.org request # 发送请求(https://www.npmjs.com/package/request) nodemon npm install -g nodemon(服务端程序修改后自动重启) cheerio # 操作字符串像dom一样 browser-sync # 浏览器开发软件间同步 bower npm install -g bower 静态js文件管理器,解决依赖问题, 例如bootstrap依赖于jQuery,在下载bootsrap时会同时下载jQuery bower install jquery#1.</p><p class=article-more-link><a href=https://robert196.github.io/2016/05/17/npm%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/>阅读更多</a></p></div></div></article><nav id=page-nav></nav></section></div></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2020
 R
 Powered by <a href=//gohugo.io>Hugo</a>. Theme by <a href=https://github.com/ppoffice>PPOffice</a>.</div></div></footer><script src=https://robert196.github.io/fancybox/jquery.fancybox.pack.js></script><script src=https://robert196.github.io/js/script.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script><script type=text/x-mathjax-config>
 MathJax.Hub.Config({
