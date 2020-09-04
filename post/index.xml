@@ -23,14 +23,7 @@ mount.cifs //192.168.123.234/download/outer-source /mnt/data -o username&lt;span
 &lt;span style="color:#75715e"># 编辑 /etc/fstab&lt;/span>
 &lt;span style="color:#75715e"># vers=1.0,_netdev 服务端版本低客户端增加该配置，以及网络等待配置&lt;/span>
 //192.168.123.234/download/outer-source /mnt/data cifs vers&lt;span style="color:#f92672">=&lt;/span>1.0,username&lt;span style="color:#f92672">=&lt;/span>username,password&lt;span style="color:#f92672">=&lt;/span>password,_netdev,uid&lt;span style="color:#f92672">=&lt;/span>0,gid&lt;span style="color:#f92672">=&lt;/span>0,iocharset&lt;span style="color:#f92672">=&lt;/span>utf8 &lt;span style="color:#ae81ff">0&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Docker常用命令</title><link>https://robert196.github.io/2018/12/12/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</link><pubDate>Wed, 12 Dec 2018 08:18:34 +0800</pubDate><guid>https://robert196.github.io/2018/12/12/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</guid><description>&lt;div class="article-gallery">
-&lt;div class="article-gallery-photos">
-&lt;a class="article-gallery-img fancybox" href="https://robert196.github.io/banners/docker.jpeg" rel="group1">
-&lt;img src="https://robert196.github.io/banners/docker.jpeg" itemprop="image">
-&lt;/a>
-&lt;/div>
-&lt;/div>
-&lt;h3 id="删除容器">删除容器&lt;/h3>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Docker常用命令</title><link>https://robert196.github.io/2018/12/12/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</link><pubDate>Wed, 12 Dec 2018 08:18:34 +0800</pubDate><guid>https://robert196.github.io/2018/12/12/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</guid><description>&lt;h3 id="删除容器">删除容器&lt;/h3>
 &lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">docker rm &lt;span style="color:#66d9ef">$(&lt;/span>docker ps -a | grep &lt;span style="color:#e6db74">&amp;#34;Exited&amp;#34;&lt;/span> | awk &lt;span style="color:#e6db74">&amp;#39;{print $1 }&amp;#39;&lt;/span>&lt;span style="color:#66d9ef">)&lt;/span>
 &lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="删除none镜像">删除none镜像&lt;/h3>
 &lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">docker rmi &lt;span style="color:#66d9ef">$(&lt;/span>docker images | grep &lt;span style="color:#e6db74">&amp;#34;none&amp;#34;&lt;/span> | awk &lt;span style="color:#e6db74">&amp;#39;{print $3}&amp;#39;&lt;/span>&lt;span style="color:#66d9ef">)&lt;/span>
