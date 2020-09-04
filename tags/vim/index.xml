@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>vim on R</title><link>https://robert196.github.io/tags/vim/</link><description>Recent content in vim on R</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 01 Oct 2016 22:14:25 +0800</lastBuildDate><atom:link href="https://robert196.github.io/tags/vim/index.xml" rel="self" type="application/rss+xml"/><item><title>vi / vim 基本操作</title><link>https://robert196.github.io/2016/10/01/vi-/-vim-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</link><pubDate>Sat, 01 Oct 2016 22:14:25 +0800</pubDate><guid>https://robert196.github.io/2016/10/01/vi-/-vim-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</guid><description>&lt;h3 id="使用vi编辑器">使用vi编辑器&lt;/h3>
+&lt;p>注意:命令模式输入法需要处于英文状态&lt;/p>
+&lt;h4 id="方向">方向&lt;/h4>
+&lt;ul>
+&lt;li>h 左&lt;/li>
+&lt;li>j 下&lt;/li>
+&lt;li>k 上&lt;/li>
+&lt;li>l 右&lt;/li>
+&lt;/ul>
+&lt;h4 id="行内移动">行内移动&lt;/h4>
+&lt;ul>
+&lt;li>w 向后移动一个单词&lt;/li>
+&lt;li>b 向前移动一个单词&lt;/li>
+&lt;li>0 行首&lt;/li>
+&lt;li>^ 行首第一个不是空白的字符&lt;/li>
+&lt;li>$ 行尾&lt;/li>
+&lt;/ul>
+&lt;h4 id="行数移动">行数移动&lt;/h4>
+&lt;ul>
+&lt;li>gg 文件顶部&lt;/li>
+&lt;li>G 文件末尾&lt;/li>
+&lt;li>12gg(跳到12行)&lt;/li>
+&lt;li>12G(跳到12行)&lt;/li>
+&lt;li>:12(跳到12行)&lt;/li>
+&lt;/ul></description></item></channel></rss>
