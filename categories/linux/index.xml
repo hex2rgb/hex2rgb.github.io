@@ -46,7 +46,7 @@ custom_domains &lt;span style="color:#f92672">=&lt;/span> 106.12.207.57
 &lt;li>12gg(跳到12行)&lt;/li>
 &lt;li>12G(跳到12行)&lt;/li>
 &lt;li>:12(跳到12行)&lt;/li>
-&lt;/ul></description></item><item><title>github操作</title><link>https://robert196.github.io/2016/01/20/github%E6%93%8D%E4%BD%9C/</link><pubDate>Wed, 20 Jan 2016 23:14:25 +0800</pubDate><guid>https://robert196.github.io/2016/01/20/github%E6%93%8D%E4%BD%9C/</guid><description>&lt;h3 id="git初始化一个仓库">git初始化一个仓库&lt;/h3>
+&lt;/ul></description></item><item><title>github操作</title><link>https://robert196.github.io/2015/01/20/github%E6%93%8D%E4%BD%9C/</link><pubDate>Tue, 20 Jan 2015 23:14:25 +0800</pubDate><guid>https://robert196.github.io/2015/01/20/github%E6%93%8D%E4%BD%9C/</guid><description>&lt;h3 id="git初始化一个仓库">git初始化一个仓库&lt;/h3>
 &lt;ul>
 &lt;li>其实就是创建了一个.git隐藏目录&lt;/li>
 &lt;li>命令:&lt;code>git init&lt;/code>;
@@ -64,7 +64,7 @@ custom_domains &lt;span style="color:#f92672">=&lt;/span> 106.12.207.57
 &lt;li>查看配置信息: &lt;code>git config --list&lt;/code>&lt;/li>
 &lt;li>全局设置 :&lt;code>git config --global user.name [username]&lt;/code>&lt;/li>
 &lt;li>全局设置 :&lt;code>git config --global user.email [email]&lt;/code>&lt;/li>
-&lt;/ul></description></item><item><title>git 入门</title><link>https://robert196.github.io/2016/01/06/git-%E5%85%A5%E9%97%A8/</link><pubDate>Wed, 06 Jan 2016 18:14:25 +0800</pubDate><guid>https://robert196.github.io/2016/01/06/git-%E5%85%A5%E9%97%A8/</guid><description>&lt;h3 id="创建分支">创建分支&lt;/h3>
+&lt;/ul></description></item><item><title>git 入门</title><link>https://robert196.github.io/2015/01/06/git-%E5%85%A5%E9%97%A8/</link><pubDate>Tue, 06 Jan 2015 18:14:25 +0800</pubDate><guid>https://robert196.github.io/2015/01/06/git-%E5%85%A5%E9%97%A8/</guid><description>&lt;h3 id="创建分支">创建分支&lt;/h3>
 &lt;ul>
 &lt;li>命令:&lt;code>git branch [分支名]&lt;/code>
 &lt;ul>
