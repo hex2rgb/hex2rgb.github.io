@@ -3,37 +3,7 @@ curl https://ip.cn
 curl myip.ipip.net
 curl ifconfig.me
 curl members.3322.org/dyndns/getip
-&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>git 入门</title><link>https://robert196.github.io/2019/03/06/git-%E5%85%A5%E9%97%A8/</link><pubDate>Wed, 06 Mar 2019 18:14:25 +0800</pubDate><guid>https://robert196.github.io/2019/03/06/git-%E5%85%A5%E9%97%A8/</guid><description>&lt;h3 id="创建分支">创建分支&lt;/h3>
-&lt;ul>
-&lt;li>命令:&lt;code>git branch [分支名]&lt;/code>
-&lt;ul>
-&lt;li>创建一个新分支&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>命令:&lt;code>git branch&lt;/code>
-&lt;ul>
-&lt;li>查看当前所有的分支&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul></description></item><item><title>github操作</title><link>https://robert196.github.io/2019/03/06/github%E6%93%8D%E4%BD%9C/</link><pubDate>Wed, 06 Mar 2019 18:14:25 +0800</pubDate><guid>https://robert196.github.io/2019/03/06/github%E6%93%8D%E4%BD%9C/</guid><description>&lt;h3 id="git初始化一个仓库">git初始化一个仓库&lt;/h3>
-&lt;ul>
-&lt;li>其实就是创建了一个.git隐藏目录&lt;/li>
-&lt;li>命令:&lt;code>git init&lt;/code>;
-&lt;ul>
-&lt;li>想在哪个目录创建.git目录，就是哪个目录打开工具然后写命令.&lt;/li>
-&lt;li>一般是在项目的根目录执行这个命令.&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="配置">配置&lt;/h3>
-&lt;ul>
-&lt;li>配置用户名 : &lt;code>git config user.name &amp;quot;testName&amp;quot;&lt;/code>&lt;/li>
-&lt;li>配置邮箱 : &lt;code>git config user.email &amp;quot;test@sina.com&amp;quot;&lt;/code>&lt;/li>
-&lt;li>上面这两条命令是在设置我当前目录里面的用户名和邮箱&lt;/li>
-&lt;li>查看配置信息: &lt;code>git config --list&lt;/code>&lt;/li>
-&lt;li>全局设置 :&lt;code>git config --global user.name [username]&lt;/code>&lt;/li>
-&lt;li>全局设置 :&lt;code>git config --global user.email [email]&lt;/code>&lt;/li>
-&lt;/ul></description></item><item><title>开机挂载smb、cifs</title><link>https://robert196.github.io/2019/03/06/%E5%BC%80%E6%9C%BA%E6%8C%82%E8%BD%BDsmbcifs/</link><pubDate>Wed, 06 Mar 2019 18:14:25 +0800</pubDate><guid>https://robert196.github.io/2019/03/06/%E5%BC%80%E6%9C%BA%E6%8C%82%E8%BD%BDsmbcifs/</guid><description>&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">&lt;span style="color:#75715e"># 手动挂载&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>开机挂载smb、cifs</title><link>https://robert196.github.io/2019/03/06/%E5%BC%80%E6%9C%BA%E6%8C%82%E8%BD%BDsmbcifs/</link><pubDate>Wed, 06 Mar 2019 18:14:25 +0800</pubDate><guid>https://robert196.github.io/2019/03/06/%E5%BC%80%E6%9C%BA%E6%8C%82%E8%BD%BDsmbcifs/</guid><description>&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">&lt;span style="color:#75715e"># 手动挂载&lt;/span>
 mount.cifs //192.168.123.234/download/outer-source /mnt/data -o username&lt;span style="color:#f92672">=&lt;/span>username,password&lt;span style="color:#f92672">=&lt;/span>password
 &lt;span style="color:#75715e"># 开机挂载&lt;/span>
 &lt;span style="color:#75715e"># 编辑 /etc/fstab&lt;/span>
@@ -76,4 +46,34 @@ custom_domains &lt;span style="color:#f92672">=&lt;/span> 106.12.207.57
 &lt;li>12gg(跳到12行)&lt;/li>
 &lt;li>12G(跳到12行)&lt;/li>
 &lt;li>:12(跳到12行)&lt;/li>
+&lt;/ul></description></item><item><title>github操作</title><link>https://robert196.github.io/2016/01/20/github%E6%93%8D%E4%BD%9C/</link><pubDate>Wed, 20 Jan 2016 23:14:25 +0800</pubDate><guid>https://robert196.github.io/2016/01/20/github%E6%93%8D%E4%BD%9C/</guid><description>&lt;h3 id="git初始化一个仓库">git初始化一个仓库&lt;/h3>
+&lt;ul>
+&lt;li>其实就是创建了一个.git隐藏目录&lt;/li>
+&lt;li>命令:&lt;code>git init&lt;/code>;
+&lt;ul>
+&lt;li>想在哪个目录创建.git目录，就是哪个目录打开工具然后写命令.&lt;/li>
+&lt;li>一般是在项目的根目录执行这个命令.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="配置">配置&lt;/h3>
+&lt;ul>
+&lt;li>配置用户名 : &lt;code>git config user.name &amp;quot;testName&amp;quot;&lt;/code>&lt;/li>
+&lt;li>配置邮箱 : &lt;code>git config user.email &amp;quot;test@sina.com&amp;quot;&lt;/code>&lt;/li>
+&lt;li>上面这两条命令是在设置我当前目录里面的用户名和邮箱&lt;/li>
+&lt;li>查看配置信息: &lt;code>git config --list&lt;/code>&lt;/li>
+&lt;li>全局设置 :&lt;code>git config --global user.name [username]&lt;/code>&lt;/li>
+&lt;li>全局设置 :&lt;code>git config --global user.email [email]&lt;/code>&lt;/li>
+&lt;/ul></description></item><item><title>git 入门</title><link>https://robert196.github.io/2016/01/06/git-%E5%85%A5%E9%97%A8/</link><pubDate>Wed, 06 Jan 2016 18:14:25 +0800</pubDate><guid>https://robert196.github.io/2016/01/06/git-%E5%85%A5%E9%97%A8/</guid><description>&lt;h3 id="创建分支">创建分支&lt;/h3>
+&lt;ul>
+&lt;li>命令:&lt;code>git branch [分支名]&lt;/code>
+&lt;ul>
+&lt;li>创建一个新分支&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>命令:&lt;code>git branch&lt;/code>
+&lt;ul>
+&lt;li>查看当前所有的分支&lt;/li>
+&lt;/ul>
+&lt;/li>
 &lt;/ul></description></item></channel></rss>
