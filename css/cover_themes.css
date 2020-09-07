@@ -35,10 +35,6 @@
     box-sizing: border-box;
 }
 
-#profile .inner .base-info #follow {
-    background-color: #1dc897;
-}
-
 .tagcloud a {
     display: inline-block;
     background-color: #f3f3f3;
