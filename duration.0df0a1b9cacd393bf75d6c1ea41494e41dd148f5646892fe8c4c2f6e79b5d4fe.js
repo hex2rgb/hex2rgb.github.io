@@ -8,8 +8,8 @@
     var H = canvas.height;
     var gridX = 4;
     var gridY = 4;
-    var colors = Array.from(new Array(5), () => radomHex());
-    var durVal = 0.1;
+    var colors = Array.from(new Array(5), () => radomHSL());
+    var durVal = 0.3;
     function Particle(x, y) {
       this.x = x;
       this.y = y;
@@ -92,6 +92,12 @@
     }
     function radomHex() {
       return "#" + (Math.random() * 16777215 << 0).toString(16);
+    }
+    function radomHSL() {
+      var H2 = randomInt(0, 36) * 10;
+      var S = randomInt(40, 60) + "%";
+      var L = randomInt(40, 60) + "%";
+      return "hsl(" + H2 + "," + S + "," + L + ")";
     }
     function init() {
       drawFrame();
