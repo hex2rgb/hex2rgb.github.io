@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>新三 on R</title><link>https://hex2rgb.github.io/tags/%E6%96%B0%E4%B8%89/</link><description>Recent content in 新三 on R</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 10 Dec 2020 13:46:12 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/tags/%E6%96%B0%E4%B8%89/index.xml" rel="self" type="application/rss+xml"/><item><title>Router Laomaozi</title><link>https://hex2rgb.github.io/2020/12/10/router-laomaozi/</link><pubDate>Thu, 10 Dec 2020 13:46:12 +0800</pubDate><guid>https://hex2rgb.github.io/2020/12/10/router-laomaozi/</guid><description>&lt;ol start="0">
+&lt;li>使用DiskGenius格式化为ext4格式（或者使用linux上使用命令进行格式化）&lt;/li>
+&lt;li>u盘根文件夹建立 /opt 文件夹&lt;/li>
+&lt;li>去老毛子后台打开如下开关，应用，然后重启
+&lt;img src="https://hex2rgb.github.io/post-images/laomaozi.png" alt="opt配置">&lt;/li>
+&lt;/ol></description></item></channel></rss>
