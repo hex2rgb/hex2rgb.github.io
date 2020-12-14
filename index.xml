@@ -3,7 +3,7 @@
 &lt;li>u盘根文件夹建立 /opt 文件夹&lt;/li>
 &lt;li>去老毛子后台打开如下开关，应用，然后重启
 &lt;img src="https://hex2rgb.github.io/post-images/laomaozi.png" alt="opt配置">&lt;/li>
-&lt;/ol></description></item><item><title>Docker Deamonjson</title><link>https://hex2rgb.github.io/2020/11/20/docker-deamonjson/</link><pubDate>Fri, 20 Nov 2020 09:05:39 +0800</pubDate><guid>https://hex2rgb.github.io/2020/11/20/docker-deamonjson/</guid><description>&lt;ul>
+&lt;/ol></description></item><item><title>Docker Daemonjson</title><link>https://hex2rgb.github.io/2020/11/20/docker-daemonjson/</link><pubDate>Fri, 20 Nov 2020 09:05:39 +0800</pubDate><guid>https://hex2rgb.github.io/2020/11/20/docker-daemonjson/</guid><description>&lt;ul>
 &lt;li>路径 &lt;code>/etc/docker/daemon.json&lt;/code> 没有就新建一个&lt;/li>
 &lt;/ul>
 &lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-json" data-lang="json">{
