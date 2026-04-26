@@ -1,4 +1,34 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - CYBER ZEN</title><link>https://hex2rgb.github.io/posts/</link><description>所有文章 | CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 26 Apr 2026 22:35:37 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/posts/" rel="self" type="application/rss+xml"/><item><title>Unraid VirtioFS 导致 Ubuntu 重启丢失 IP</title><link>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</link><pubDate>Sun, 26 Apr 2026 22:35:37 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</guid><description><![CDATA[<h1 id="unraid-虚拟机添加-virtiofs-后-ubuntu-重启无ip需要手动dhcp才能上网-完整总结">Unraid 虚拟机添加 VirtioFS 后 Ubuntu 重启无IP，需要手动DHCP才能上网 完整总结</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - CYBER ZEN</title><link>https://hex2rgb.github.io/posts/</link><description>所有文章 | CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 26 Apr 2026 22:35:37 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/posts/" rel="self" type="application/rss+xml"/><item><title>AI prompt 输出 markdown 源码</title><link>https://hex2rgb.github.io/posts/ai-markdown-prompt/</link><pubDate>Sun, 26 Apr 2026 22:35:37 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/ai-markdown-prompt/</guid><description><![CDATA[<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-text">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">任务：将图片中的所有内容完整转写为 Markdown
+</span></span><span class="line"><span class="cl">严格要求：
+</span></span><span class="line"><span class="cl">输出必须使用 一个且仅一个代码块 包裹（使用 ```markdown 开头）
+</span></span><span class="line"><span class="cl">禁止在代码块外输出任何内容
+</span></span><span class="line"><span class="cl">保持原始结构：
+</span></span><span class="line"><span class="cl">标题层级（#、##、###）
+</span></span><span class="line"><span class="cl">列表（-、1.）
+</span></span><span class="line"><span class="cl">代码块（bash、yaml 等）
+</span></span><span class="line"><span class="cl">行间空行
+</span></span><span class="line"><span class="cl">所有代码块必须正确嵌套（外层 markdown，内层 bash / ```yaml）
+</span></span><span class="line"><span class="cl">禁止拆分为多个代码块
+</span></span><span class="line"><span class="cl">禁止总结、解释、改写或补充
+</span></span><span class="line"><span class="cl">文本必须与图片内容逐字一致（包括标点、大小写、空格）
+</span></span><span class="line"><span class="cl">保留所有命令、路径、配置格式
+</span></span><span class="line"><span class="cl">如果图片中有多个代码块，必须在同一个 markdown 代码块内原样还原
+</span></span><span class="line"><span class="cl">输出格式示例：
+</span></span><span class="line"><span class="cl"># 标题
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">内容...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">```bash
+</span></span><span class="line"><span class="cl">命令
+</span></span><span class="line"><span class="cl">配置
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">只输出结果，不要任何解释。</span></span></code></pre></div></div>]]></description></item><item><title>Unraid VirtioFS 导致 Ubuntu 重启丢失 IP</title><link>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</link><pubDate>Sun, 26 Apr 2026 22:35:37 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</guid><description><![CDATA[<h1 id="unraid-虚拟机添加-virtiofs-后-ubuntu-重启无ip需要手动dhcp才能上网-完整总结">Unraid 虚拟机添加 VirtioFS 后 Ubuntu 重启无IP，需要手动DHCP才能上网 完整总结</h1>
 <h2 id="一问题现象">一、问题现象</h2>
 <ul>
 <li>Ubuntu 虚拟机重启后无法自动获取 IPv4 地址</li>
