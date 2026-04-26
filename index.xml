@@ -1,4 +1,64 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>CYBER ZEN</title><link>https://hex2rgb.github.io/</link><description>This is my cool site</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 26 Apr 2026 16:30:54 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>GitHub Action 使用私有仓库 Submodule</title><link>https://hex2rgb.github.io/posts/github-action%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/</link><pubDate>Sun, 26 Apr 2026 16:30:54 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/github-action%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/</guid><description><![CDATA[<h1 id="github-actions--私有-submodulepat配置记录">GitHub Actions + 私有 Submodule（PAT）配置记录</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>CYBER ZEN</title><link>https://hex2rgb.github.io/</link><description>This is my cool site</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 26 Apr 2026 22:35:37 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Unraid VirtioFS 导致 Ubuntu 重启丢失 IP</title><link>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</link><pubDate>Sun, 26 Apr 2026 22:35:37 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</guid><description><![CDATA[<h1 id="unraid-虚拟机添加-virtiofs-后-ubuntu-重启无ip需要手动dhcp才能上网-完整总结">Unraid 虚拟机添加 VirtioFS 后 Ubuntu 重启无IP，需要手动DHCP才能上网 完整总结</h1>
+<h2 id="一问题现象">一、问题现象</h2>
+<ul>
+<li>Ubuntu 虚拟机重启后无法自动获取 IPv4 地址</li>
+<li>网卡物理链路正常，<code>carrier=1</code>，链路已连通</li>
+<li>开机无IP，必须手动执行 DHCP 命令才可联网</li>
+<li>Unraid 后台无法读取虚拟机IP，访客代理异常</li>
+</ul>
+<h2 id="二核心根本原因">二、核心根本原因</h2>
+<ol>
+<li>Unraid 给 Ubuntu 虚拟机新增了 <code>VirtioFS</code> 共享设备</li>
+<li>VirtioFS 属于独立 PCI 虚拟设备，占用硬件插槽</li>
+<li>虚拟机 PCI 设备顺序被打乱，网卡序号偏移</li>
+<li>网卡名称由 <code>enp1s0</code> 自动变更为 <code>enp3s0</code></li>
+<li>系统 netplan 配置仍绑定旧网卡名称，DHCP 规则失效</li>
+<li>开机网络服务不会对新网卡自动重试 DHCP 请求</li>
+</ol>
+<h2 id="三临时解决手动执行dhcp获取ip">三、临时解决：手动执行DHCP获取IP</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ip link <span class="nb">set</span> enp3s0 up
+</span></span><span class="line"><span class="cl">sudo dhclient enp3s0</span></span></code></pre></div></div>
+<h2 id="四永久修复重启自动获取-ip">四、永久修复：重启自动获取 IP</h2>
+<h3 id="1-修改-netplan-网络配置修正对应网卡名称">1. 修改 netplan 网络配置，修正对应网卡名称</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo nano /etc/netplan/50-cloud-init.yaml</span></span></code></pre></div></div>
+<h3 id="2-写入正确配置可能是网卡变更了">2. 写入正确配置(可能是网卡变更了)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">network</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ethernets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enp3s0</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">dhcp4</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span></span></span></code></pre></div></div>
+<h3 id="3-生效配置--修复启动时序冲突">3. 生效配置 + 修复启动时序冲突</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo netplan apply
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now systemd-networkd-wait-online
+</span></span><span class="line"><span class="cl">sudo apt purge -y cloud-init
+</span></span><span class="line"><span class="cl">sudo reboot</span></span></code></pre></div></div>
+<h2 id="五修复验证检查">五、修复验证检查</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ip addr</span></span></code></pre></div></div>]]></description></item><item><title>GitHub Action 使用私有仓库 Submodule</title><link>https://hex2rgb.github.io/posts/github-action%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/</link><pubDate>Sun, 26 Apr 2026 16:30:54 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/github-action%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/</guid><description><![CDATA[<h1 id="github-actions--私有-submodulepat配置记录">GitHub Actions + 私有 Submodule（PAT）配置记录</h1>
 <h2 id="仓库结构">仓库结构</h2>
 <ul>
 <li>

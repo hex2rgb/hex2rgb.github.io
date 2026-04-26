@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>运维 - 分类 - CYBER ZEN</title><link>https://hex2rgb.github.io/categories/%E8%BF%90%E7%BB%B4/</link><description>运维 - 分类 - CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 26 Apr 2026 22:35:37 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/categories/%E8%BF%90%E7%BB%B4/" rel="self" type="application/rss+xml"/><item><title>Unraid VirtioFS 导致 Ubuntu 重启丢失 IP</title><link>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</link><pubDate>Sun, 26 Apr 2026 22:35:37 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</guid><description><![CDATA[<h1 id="unraid-虚拟机添加-virtiofs-后-ubuntu-重启无ip需要手动dhcp才能上网-完整总结">Unraid 虚拟机添加 VirtioFS 后 Ubuntu 重启无IP，需要手动DHCP才能上网 完整总结</h1>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Unraid - 标签 - CYBER ZEN</title><link>https://hex2rgb.github.io/tags/unraid/</link><description>Unraid - 标签 - CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 26 Apr 2026 22:35:37 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/tags/unraid/" rel="self" type="application/rss+xml"/><item><title>Unraid VirtioFS 导致 Ubuntu 重启丢失 IP</title><link>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</link><pubDate>Sun, 26 Apr 2026 22:35:37 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/dhcp%E5%A4%B1%E6%95%88/</guid><description><![CDATA[<h1 id="unraid-虚拟机添加-virtiofs-后-ubuntu-重启无ip需要手动dhcp才能上网-完整总结">Unraid 虚拟机添加 VirtioFS 后 Ubuntu 重启无IP，需要手动DHCP才能上网 完整总结</h1>
 <h2 id="一问题现象">一、问题现象</h2>
 <ul>
 <li>Ubuntu 虚拟机重启后无法自动获取 IPv4 地址</li>
@@ -58,69 +58,4 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ip addr</span></span></code></pre></div></div>]]></description></item><item><title>GitHub Action 使用私有仓库 Submodule</title><link>https://hex2rgb.github.io/posts/github-action%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/</link><pubDate>Sun, 26 Apr 2026 16:30:54 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/github-action%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93/</guid><description><![CDATA[<h1 id="github-actions--私有-submodulepat配置记录">GitHub Actions + 私有 Submodule（PAT）配置记录</h1>
-<h2 id="仓库结构">仓库结构</h2>
-<ul>
-<li>
-<p>A 源码仓库（主仓库）</p>
-<ul>
-<li>存放 Hugo 博客源码</li>
-<li>运行 GitHub Actions</li>
-<li>分支：<code>main</code></li>
-</ul>
-</li>
-<li>
-<p>B 部署仓库</p>
-<ul>
-<li>仓库名：<code>hex2rgb.github.io</code></li>
-<li>存放构建后的静态文件（<code>public/</code>）</li>
-<li>用于 GitHub Pages 访问</li>
-</ul>
-</li>
-<li>
-<p>C 主题仓库（Submodule）</p>
-<ul>
-<li>仓库名：<code>hex2rgb/LoveIt</code></li>
-<li>私有仓库</li>
-<li>位置：<code>themes/LoveIt</code></li>
-<li>引入方式：Git Submodule</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="调用关系">调用关系</h2>
-<p>A（源码仓库）
-├── content/
-├── config/
-├── themes/
-│   └── LoveIt（submodule → C）
-└── .github/workflows/</p>
-<p>GitHub Actions 流程：</p>
-<ol>
-<li>拉取主仓库代码</li>
-<li>拉取私有主题子模块 C</li>
-<li>Hugo 构建生成 public</li>
-<li>推送产物到部署仓库 B</li>
-</ol>
-<hr>
-<h2 id="认证方式">认证方式</h2>
-<p>统一使用 PAT（Personal Access Token）：</p>
-<ul>
-<li>全程走 HTTPS 方式访问仓库</li>
-<li>用于：
-<ul>
-<li>拉取私有 submodule（C）</li>
-<li>推送部署仓库（B）</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="关键配置点">关键配置点</h2>
-<ul>
-<li>Submodule（C）为私有仓库，CI 默认无访问权限</li>
-<li>必须通过 PAT 配置 Git 鉴权</li>
-<li>所有 Git 操作统一使用 HTTPS + Token</li>
-</ul>
-<hr>
-<h2 id="一句话总结">一句话总结</h2>
-<p>源码仓构建，静态仓托管页面，私有主题用子模块管理，PAT 打通访问链路。</p>]]></description></item></channel></rss>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ip addr</span></span></code></pre></div></div>]]></description></item></channel></rss>
