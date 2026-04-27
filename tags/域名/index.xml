@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>域名 - 标签 - CYBER ZEN</title><link>https://hex2rgb.github.io/tags/%E5%9F%9F%E5%90%8D/</link><description>域名 - 标签 - CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 27 Apr 2026 09:37:48 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/tags/%E5%9F%9F%E5%90%8D/" rel="self" type="application/rss+xml"/><item><title>github page 自定义域名设置后消失</title><link>https://hex2rgb.github.io/posts/my-first-post/</link><pubDate>Mon, 27 Apr 2026 09:37:48 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/my-first-post/</guid><description><![CDATA[<h2 id="自定义域名消失hugo-自动部署场景">自定义域名消失（Hugo 自动部署场景）</h2>
+<p>原因很简单：</p>
+<p>Hugo 自动部署时，生成的内容里 <strong>没有 <code>CNAME</code> 文件</strong>，发布分支被全量覆盖，GitHub Pages 检测不到域名配置，就把自定义域名清空了。</p>
+<hr>
+<h2 id="解决">解决</h2>
+<p>在 Hugo 项目中添加：static/CNAME</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-text">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">blog.hex2rgb.top</span></span></code></pre></div></div>
+<h2 id="附件">附件</h2>
+<p></p>]]></description></item></channel></rss>
