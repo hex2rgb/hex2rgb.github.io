@@ -244,7 +244,7 @@ Actions 执行：安装 Hugo → 打包源码 → 生成 public → 用私钥推
 <h2 id="常见坑点">常见坑点</h2>
 <h3 id="job-隔离问题">Job 隔离问题</h3>
 <p>不同 job 环境完全隔离，执行完毕立即销毁。如果把 build 和 deploy 分为两个 job，打包生成的 public 目录会丢失。</p>]]></description></item><item><title>Windows 10 企业版激活指南</title><link>https://hex2rgb.github.io/posts/windows%E6%BF%80%E6%B4%BB/</link><pubDate>Sat, 25 Apr 2026 19:54:50 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/windows%E6%BF%80%E6%B4%BB/</guid><description><![CDATA[<h2 id="简介">简介</h2>
-<p>本文介绍如何激活 Windows 10 企业版 LTSB 2016，通过使用 KMS 激活服务，可以快速完成系统激活。</p>
+<p>本文介绍如何激活 Windows 10 企业版 LTSB 2016/Windows 11 企业版 LTSC(也能用这个密钥)，通过使用 KMS 激活服务，可以快速完成系统激活。</p>
 <h2 id="激活步骤">激活步骤</h2>
 <h3 id="前置准备">前置准备</h3>
 <ul>
