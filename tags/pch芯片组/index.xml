@@ -1,0 +1,40 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>PCH芯片组 - 标签 - CYBER ZEN</title><link>https://hex2rgb.github.io/tags/pch%E8%8A%AF%E7%89%87%E7%BB%84/</link><description>PCH芯片组 - 标签 - CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 28 Apr 2026 19:28:27 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/tags/pch%E8%8A%AF%E7%89%87%E7%BB%84/" rel="self" type="application/rss+xml"/><item><title>PCIE通道分配异常问题排查及知识总结</title><link>https://hex2rgb.github.io/posts/pcie%E9%80%9A%E9%81%93%E5%88%86%E9%85%8D%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%8F%8A%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/</link><pubDate>Tue, 28 Apr 2026 19:28:27 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/pcie%E9%80%9A%E9%81%93%E5%88%86%E9%85%8D%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%8F%8A%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/</guid><description><![CDATA[<h2 id="起因">起因</h2>
+<ul>
+<li>组装电脑后，分别插入一块x16规格显卡和一块PCIe x1转SATA扩展卡，发现显卡未运行在x16满带宽模式，而是降为x8模式，对此产生疑惑并排查原因。</li>
+</ul>
+<h2 id="大概明白了">大概明白了</h2>
+<ul>
+<li>CPU存在<strong>PCI Express通道数最大值</strong>参数，消费级CPU通常为16条，高端型号可达20条及以上，我的CPU支持16条通道。</li>
+<li>主板上的PCIe通道分为两类：一类来自CPU（高速通道），另一类来自PCH南桥（低速通道），具体如图1所示【图1】。</li>
+<li>由于将PCIe x1转SATA扩展卡插入了CPU直连的高速PCIe插槽，导致CPU的16条通道被拆分为8+8，显卡因此只能运行在x8模式。</li>
+<li>后续将扩展卡更换至PCH控制的PCIe插槽后，显卡成功恢复x16满带宽运行。</li>
+</ul>
+<h2 id="pcie通道与芯片组扩展知识总结">PCIe通道与芯片组扩展知识总结</h2>
+<h2 id="一pcie-x1插槽基础">一、PCIe x1插槽基础</h2>
+<ul>
+<li>多数由主板芯片组提供通道，不直接与CPU连接。</li>
+<li>主要适配网卡、声卡等低带宽设备，满足基础扩展需求。</li>
+<li>可通过扩展卡转接为SATA接口，实现硬盘扩展。</li>
+</ul>
+<h2 id="二pcie-x1转sata扩展卡特性">二、PCIe x1转SATA扩展卡特性</h2>
+<ul>
+<li>信号需经过南桥（PCH）处理，带宽受PCIe版本限制。</li>
+<li>PCIe 3.0 x1接口理论带宽为1GB/s，可稳定支持4块SATA硬盘同时工作。</li>
+<li>单块硬盘传输速度接近原生SATA 3.0接口的600MB/s上限。</li>
+</ul>
+<h2 id="三cpu-pcie通道分配规则">三、CPU PCIe通道分配规则</h2>
+<ul>
+<li>若将CPU的16条通道全部分配给x16显卡插槽，依赖CPU通道的设备（如部分M.2 SSD）会被自动禁用。</li>
+<li>由芯片组扩展的PCIe x1、x4等低速设备，不受CPU通道分配的影响，可正常工作。</li>
+</ul>
+<h2 id="四芯片组与pch功能">四、芯片组与PCH功能</h2>
+<ul>
+<li>现代主板中的PCH（平台控制器中枢）即传统意义上的南桥，主要负责低速接口扩展。</li>
+<li>芯片组型号决定主板的扩展能力，例如C246芯片组的PCIe通道数量多于C236芯片组。</li>
+<li>主板手册中提及的“来自PCH的PCIe通道”，即指由芯片组提供的扩展通道资源。</li>
+</ul>
+<h2 id="附件">附件</h2>
+<p>图1</p>
+<blockquote>
+<p></p>
+</blockquote>]]></description></item></channel></rss>
