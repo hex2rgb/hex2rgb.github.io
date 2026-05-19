@@ -1,4 +1,52 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - CYBER ZEN</title><link>https://hex2rgb.github.io/posts/</link><description>所有文章 | CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 06 May 2026 14:53:40 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/posts/" rel="self" type="application/rss+xml"/><item><title>Unraid定价联想</title><link>https://hex2rgb.github.io/posts/unraid%E5%AE%9A%E4%BB%B7%E8%81%94%E6%83%B3/</link><pubDate>Wed, 06 May 2026 14:53:40 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/unraid%E5%AE%9A%E4%BB%B7%E8%81%94%E6%83%B3/</guid><description><![CDATA[<h3 id="一定价的困惑为什么是6盘12盘不限制">一、定价的困惑：为什么是6盘、12盘、不限制？</h3>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - CYBER ZEN</title><link>https://hex2rgb.github.io/posts/</link><description>所有文章 | CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 19 May 2026 10:18:01 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/posts/" rel="self" type="application/rss+xml"/><item><title>Tailscale OpenClash 配合使用：UDP 中继问题排查</title><link>https://hex2rgb.github.io/posts/tailscale-openclash/</link><pubDate>Tue, 19 May 2026 10:18:01 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/tailscale-openclash/</guid><description><![CDATA[<h3 id="openclash--tailscale--子网访问">OpenClash + Tailscale + 子网访问</h3>
+<p>这件事挺折腾的，最终是以不是特别满意的方案暂时搞定了，感觉是还有一些不对劲的地方，还得在研究一下，好在暂时能用</p>
+<ul>
+<li>保持 <code>FakeIP</code> 增强模式</li>
+<li>Tailscale 使用 Direct</li>
+<li>可以正常访问 <code>192.168.123.0/24</code></li>
+<li>OpenClash 重启后规则保留</li>
+</ul>
+<hr>
+<h3 id="一现象">一、现象</h3>
+<p>开启 OpenClash 后：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tailscale netcheck</span></span></code></pre></div></div>
+<p>出现：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-text">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">UDP: false</span></span></code></pre></div></div>
+<p>同时：</p>
+<ul>
+<li>Tailscale 走 DERP Relay</li>
+<li>子网访问很慢</li>
+</ul>
+<p>关闭 OpenClash 后恢复正常。</p>
+<hr>
+<h3 id="二clash-rules">二、Clash Rules</h3>
+<p>覆写规则：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 本地子网</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">IP-CIDR,192.168.123.0/24,DIRECT,no-resolve</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># Tailscale CGNAT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">IP-CIDR,100.64.0.0/10,DIRECT,no-resolve</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># Tailscale 域名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">DOMAIN-SUFFIX,ts.net,DIRECT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">DOMAIN-SUFFIX,tailscale.com,DIRECT</span></span></span></code></pre></div></div>
+<p>这些规则主要用于：</p>]]></description></item><item><title>Unraid定价联想</title><link>https://hex2rgb.github.io/posts/unraid%E5%AE%9A%E4%BB%B7%E8%81%94%E6%83%B3/</link><pubDate>Wed, 06 May 2026 14:53:40 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/unraid%E5%AE%9A%E4%BB%B7%E8%81%94%E6%83%B3/</guid><description><![CDATA[<h3 id="一定价的困惑为什么是6盘12盘不限制">一、定价的困惑：为什么是6盘、12盘、不限制？</h3>
 <p>一开始我特别不理解：市面上8盘位的NAS一大堆，12盘位的却很少（也不是没有，就是很少见）。</p>
 <p>再看 Unraid 的定价策略：<strong>6盘、12盘、无限制</strong>。我当时就纳闷，为什么没有8盘这个档位？明明8盘机箱有，8盘主板也有。更奇怪的是，它为什么不定价4盘、6盘、8盘，偏偏是6盘、12盘和不限制？</p>
 <h3 id="二商业逻辑吃定你的取舍">二、商业逻辑：吃定你的取舍</h3>
