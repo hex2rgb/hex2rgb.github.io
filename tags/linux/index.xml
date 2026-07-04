@@ -43,4 +43,83 @@
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">LV         VG
 </span></span><span class="line"><span class="cl">ubuntu-lv  ubuntu-vg</span></span></code></pre></div></div>
-<p>得到设备路径：</p>]]></description></item></channel></rss>
+<p>得到设备路径：</p>]]></description></item><item><title>Linux 全局环境变量配置方式优缺点对比</title><link>https://hex2rgb.github.io/posts/linux-env-variable-config-comparison/</link><pubDate>Sun, 26 Apr 2026 07:18:37 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/linux-env-variable-config-comparison/</guid><description><![CDATA[<blockquote>
+<p><strong>核心矛盾</strong>：Node.js 装在 <code>/opt/node22/bin/</code>，但该路径不在系统默认 <code>$PATH</code> 中。直接敲 <code>node</code>、<code>npm</code> 报&quot;命令未找到&quot;。重启后终端、服务、定时任务都想直接用，不能每个场景单独配 PATH。</p>
+</blockquote>
+<h2 id="方案总览">方案总览</h2>
+<p>所有方案的目标：<strong>系统任何场景下，直接敲命令就能运行</strong>，不用打全路径。</p>
+<table>
+  <thead>
+      <tr>
+          <th>方案</th>
+          <th>类型</th>
+          <th>覆盖场景</th>
+          <th>插拔</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>软链到 <code>/usr/local/bin/</code></td>
+          <td>文件系统层（非环境变量）</td>
+          <td>全部（shell + systemd + cron）</td>
+          <td>是</td>
+      </tr>
+      <tr>
+          <td><code>/etc/profile.d/*.sh</code></td>
+          <td>环境变量</td>
+          <td>仅交互式 shell</td>
+          <td>是</td>
+      </tr>
+      <tr>
+          <td><code>/etc/environment</code></td>
+          <td>环境变量</td>
+          <td>全部</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>~/.bashrc</code> / <code>~/.zshrc</code></td>
+          <td>环境变量</td>
+          <td>仅当前用户 shell</td>
+          <td>是</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="1-软链到-usrlocalbin推荐">1. 软链到 /usr/local/bin/（推荐）</h2>
+<p>非标准路径的命令，链到 <code>/usr/local/bin/</code>，因为它在所有默认 PATH 里。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ln -sf /opt/node22/bin/node /usr/local/bin/node
+</span></span><span class="line"><span class="cl">sudo ln -sf /opt/node22/bin/npm /usr/local/bin/npm
+</span></span><span class="line"><span class="cl">sudo ln -sf /opt/node22/bin/npx /usr/local/bin/npx</span></span></code></pre></div></div>
+<h3 id="优点">优点</h3>
+<ul>
+<li><strong>一行命令，覆盖所有场景</strong>：终端、systemd 服务、cron 定时任务都能直接敲</li>
+<li><strong>纯插拔</strong>：删软链 = 恢复，不动任何配置文件</li>
+<li><strong>重启不丢失</strong>，因为它改的是文件系统，不是运行时变量</li>
+<li>不需要改 PATH、不需要写配置、不需要改 service</li>
+</ul>
+<h3 id="缺点">缺点</h3>
+<ul>
+<li>每个命令单独链，命令多了要链一堆</li>
+<li>如果两个 node 版本都链到 /usr/local/bin，后面覆盖前面</li>
+<li>少数命令会读 <code>$0</code> 或自身路径来判断行为，软链可能导致它认为自己装在其他位置</li>
+</ul>
+<h3 id="适用">适用</h3>
+<ul>
+<li>任何场景：终端、服务、定时任务</li>
+<li>少量命令需要全局可用时，这是最快方案</li>
+</ul>
+<hr>
+<h2 id="2-etcprofiled-目录分片脚本运维标准方案">2. /etc/profile.d/ 目录分片脚本（运维标准方案）</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># /etc/profile.d/node.sh</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;/opt/node22/bin:</span><span class="nv">$PATH</span><span class="s2">&#34;</span></span></span></code></pre></div></div>
+<p>系统登录时自动遍历 <code>/etc/profile.d/*.sh</code> 加载，这是 <strong>Linux 发行版预留的自定义入口</strong>，升级不覆盖。</p>]]></description></item></channel></rss>

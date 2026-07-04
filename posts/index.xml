@@ -1,4 +1,177 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - CYBER ZEN</title><link>https://hex2rgb.github.io/posts/</link><description>所有文章 | CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 19 May 2026 10:18:01 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/posts/" rel="self" type="application/rss+xml"/><item><title>Tailscale OpenClash 配合使用：UDP 中继问题排查</title><link>https://hex2rgb.github.io/posts/tailscale-openclash/</link><pubDate>Tue, 19 May 2026 10:18:01 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/tailscale-openclash/</guid><description><![CDATA[<h3 id="openclash--tailscale--子网访问">OpenClash + Tailscale + 子网访问</h3>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>所有文章 - CYBER ZEN</title><link>https://hex2rgb.github.io/posts/</link><description>所有文章 | CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 04 Jul 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/posts/" rel="self" type="application/rss+xml"/><item><title>ccrun 用户多实例 systemd 服务完整部署文档</title><link>https://hex2rgb.github.io/posts/ccrun-systemd-multi-instance-deploy/</link><pubDate>Sat, 04 Jul 2026 14:00:00 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/ccrun-systemd-multi-instance-deploy/</guid><description><![CDATA[<h1 id="ccrun用户多实例systemd服务完整部署文档">ccrun用户多实例systemd服务完整部署文档</h1>
+<h2 id="一名词解释">一、名词解释</h2>
+<ol>
+<li>模板文件名：<code>ccrun-lark-bridge@.service</code>
+文件里的 <code>@</code> 代表这是<strong>实例化模板</strong>，支持多套脚本共用一份配置文件。</li>
+<li>命令中 <code>ccrun-lark-bridge@test</code>
+<ul>
+<li><code>ccrun-lark-bridge</code>：模板文件前缀名称</li>
+<li><code>@</code>：固定分隔符</li>
+<li><code>test</code>：实例标识，对应模板内变量 <code>%I</code></li>
+</ul>
+</li>
+<li><code>%I</code> 替换逻辑
+命令里 <code>@test</code> 的 <code>test</code> 会填充到配置里 <code>%I</code> 位置
+<code>ExecStart=/home/ccrun/%I.sh run</code> → 实际执行 <code>/home/ccrun/test.sh run</code></li>
+</ol>
+<hr>
+<h2 id="二前置配置仅首次部署执行">二、前置配置（仅首次部署执行）</h2>
+<h3 id="21-创建统一环境变量文件-service_env">2.1 创建统一环境变量文件 service_env</h3>
+<p>解决systemd后台服务PATH缺失问题，所有实例共用一套环境</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat &gt; /home/ccrun/service_env <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s"># 同步SSH终端完整PATH，后台服务可识别所有自定义程序目录
+</span></span></span><span class="line"><span class="cl"><span class="s"># 注意：文件内不能写export，不支持$PATH/$HOME变量解析，路径必须硬编码
+</span></span></span><span class="line"><span class="cl"><span class="s">PATH=/home/ccrun/.local/bin:/opt/node22/lib/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+</span></span></span><span class="line"><span class="cl"><span class="s"># 可在此追加全局共用环境变量
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span></span></span></code></pre></div></div>
+<h3 id="22-创建用户服务目录并生成模板">2.2 创建用户服务目录并生成模板</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 创建用户服务存放目录</span>
+</span></span><span class="line"><span class="cl">mkdir -p /home/ccrun/.config/systemd/user
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 写入用户服务模板</span>
+</span></span><span class="line"><span class="cl">cat &gt; /home/ccrun/.config/systemd/user/ccrun-lark-bridge@.service <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">[Unit]
+</span></span></span><span class="line"><span class="cl"><span class="s">Description=CCRun Bridge Instance %I
+</span></span></span><span class="line"><span class="cl"><span class="s">After=network.target
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">[Service]
+</span></span></span><span class="line"><span class="cl"><span class="s">Type=simple
+</span></span></span><span class="line"><span class="cl"><span class="s"># User=ccrun
+</span></span></span><span class="line"><span class="cl"><span class="s"># 注释说明：
+</span></span></span><span class="line"><span class="cl"><span class="s"># 1. --user 用户级服务不支持开启User参数，取消注释会直接报216/GROUP启动失败
+</span></span></span><span class="line"><span class="cl"><span class="s"># 2. 用户服务默认以当前登录ccrun账号运行，无需手动强制声明执行用户
+</span></span></span><span class="line"><span class="cl"><span class="s"># 统一加载全局PATH环境，补齐后台缺失的程序搜索目录
+</span></span></span><span class="line"><span class="cl"><span class="s">EnvironmentFile=/home/ccrun/service_env
+</span></span></span><span class="line"><span class="cl"><span class="s">ExecStart=/home/ccrun/%I.sh run
+</span></span></span><span class="line"><span class="cl"><span class="s">Restart=on-failure
+</span></span></span><span class="line"><span class="cl"><span class="s">RestartSec=5
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">[Install]
+</span></span></span><span class="line"><span class="cl"><span class="s">WantedBy=default.target
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span></span></span></code></pre></div></div>
+<h3 id="23-开启用户常驻重载配置">2.3 开启用户常驻+重载配置</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 开启linger，退出SSH登录服务不会被杀死</span>
+</span></span><span class="line"><span class="cl">loginctl enable-linger ccrun
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 重载用户服务配置，加载新建模板</span>
+</span></span><span class="line"><span class="cl">systemctl --user daemon-reload</span></span></code></pre></div></div>
+<hr>
+<h2 id="三实例启停与自启操作以实例test为例">三、实例启停与自启操作（以实例test为例）</h2>
+<h3 id="1-立即启动--开机自动启动">1. 立即启动 + 开机自动启动</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl --user <span class="nb">enable</span> --now ccrun-lark-bridge@test</span></span></code></pre></div></div>
+<h3 id="2-仅临时启动不加入开机自启">2. 仅临时启动，不加入开机自启</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl --user start ccrun-lark-bridge@test</span></span></code></pre></div></div>
+<h3 id="3-仅停止服务保留开机自启配置">3. 仅停止服务，保留开机自启配置</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl --user stop ccrun-lark-bridge@test</span></span></code></pre></div></div>
+<h3 id="4-停止服务--取消开机自启彻底清理实例">4. 停止服务 + 取消开机自启（彻底清理实例）</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl --user disable --now ccrun-lark-bridge@test</span></span></code></pre></div></div>
+<h3 id="5-修改脚本环境后重启实例">5. 修改脚本/环境后重启实例</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl --user restart ccrun-lark-bridge@test</span></span></code></pre></div></div>
+<hr>
+<h2 id="四状态查看命令">四、状态查看命令</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查看实例运行状态、进程、报错信息</span>
+</span></span><span class="line"><span class="cl">systemctl --user status ccrun-lark-bridge@test</span></span></code></pre></div></div>
+<h2 id="五日志查看命令">五、日志查看命令</h2>
+<h3 id="1-实时滚动日志调试实时输出">1. 实时滚动日志（调试实时输出）</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">journalctl --user -u ccrun-lark-bridge@test -f</span></span></code></pre></div></div>
+<h3 id="2-查看今日全部日志">2. 查看今日全部日志</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">journalctl --user -u ccrun-lark-bridge@test --since today</span></span></code></pre></div></div>
+<h3 id="3-只输出最近100行日志">3. 只输出最近100行日志</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">journalctl --user -u ccrun-lark-bridge@test -n <span class="m">100</span></span></span></code></pre></div></div>
+<h3 id="4-查看全部历史日志">4. 查看全部历史日志</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">journalctl --user -u ccrun-lark-bridge@test</span></span></code></pre></div></div>
+<h2 id="六批量管理示例拓展">六、批量管理示例（拓展）</h2>
+<h3 id="批量注册开机自启并启动多个实例">批量注册开机自启并启动多个实例</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="k">for</span> name in <span class="nb">test</span> <span class="nb">test</span> demo<span class="p">;</span> <span class="k">do</span> systemctl --user <span class="nb">enable</span> --now ccrun-lark-bridge@<span class="nv">$name</span><span class="p">;</span> <span class="k">done</span></span></span></code></pre></div></div>
+<h3 id="批量停止并取消全部实例自启">批量停止并取消全部实例自启</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="k">for</span> name in <span class="nb">test</span> <span class="nb">test</span> demo<span class="p">;</span> <span class="k">do</span> systemctl --user disable --now ccrun-lark-bridge@<span class="nv">$name</span><span class="p">;</span> <span class="k">done</span></span></span></code></pre></div></div>
+<h2 id="七重要补充说明">七、重要补充说明</h2>
+<ol>
+<li>本方案为<strong>用户级服务</strong>，所有操作命令必须携带 <code>--user</code>；仅登录ccrun用户生效，无法在配置内启用<code>User=ccrun</code>，启用会报216错误。</li>
+<li>全程仅一份service模板文件，新增/删除实例无需新建配置，只需要新增对应<code>xxx.sh</code>脚本。</li>
+<li>systemd后台用户服务不会加载bash登录脚本，PATH环境极度精简；通过<code>service_env</code>统一补齐完整PATH，脚本内简写命令可正常识别。</li>
+<li>service配置内<code>Environment=&quot;PATH=xxx&quot;</code>不支持<code>$PATH</code>变量拼接，只能硬编码路径；推荐使用<code>EnvironmentFile</code>统一管理环境变量。</li>
+<li>业务主程序建议在脚本内使用<strong>绝对路径</strong>执行，不受PATH环境变动影响，兜底防止203启动失败。</li>
+</ol>
+<h2 id="八常见故障排查">八、常见故障排查</h2>
+<h3 id="1-报错-codeexited-status216group">1. 报错 code=exited, status=216/GROUP</h3>
+<p>原因：模板中存在未注释的<code>User=ccrun</code>，用户服务禁止手动指定运行用户
+修复：注释<code>User=ccrun</code> → <code>systemctl --user daemon-reload</code> → 重启实例</p>]]></description></item><item><title>Tailscale OpenClash 配合使用：UDP 中继问题排查</title><link>https://hex2rgb.github.io/posts/tailscale-openclash/</link><pubDate>Tue, 19 May 2026 10:18:01 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/tailscale-openclash/</guid><description><![CDATA[<h3 id="openclash--tailscale--子网访问">OpenClash + Tailscale + 子网访问</h3>
 <p>这件事挺折腾的，最终是以不是特别满意的方案暂时搞定了，感觉是还有一些不对劲的地方，还得在研究一下，好在暂时能用</p>
 <ul>
 <li>保持 <code>FakeIP</code> 增强模式</li>
@@ -360,30 +533,4 @@ Actions 执行：安装 Hugo → 打包源码 → 生成 public → 用私钥推
 <hr>
 <h2 id="常见坑点">常见坑点</h2>
 <h3 id="job-隔离问题">Job 隔离问题</h3>
-<p>不同 job 环境完全隔离，执行完毕立即销毁。如果把 build 和 deploy 分为两个 job，打包生成的 public 目录会丢失。</p>]]></description></item><item><title>Windows 10 企业版激活指南</title><link>https://hex2rgb.github.io/posts/windows%E6%BF%80%E6%B4%BB/</link><pubDate>Sat, 25 Apr 2026 19:54:50 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/windows%E6%BF%80%E6%B4%BB/</guid><description><![CDATA[<h2 id="简介">简介</h2>
-<p>本文介绍如何激活 Windows 10 企业版 LTSB 2016/Windows 11 企业版 LTSC(也能用这个密钥)，通过使用 KMS 激活服务，可以快速完成系统激活。</p>
-<h2 id="激活步骤">激活步骤</h2>
-<h3 id="前置准备">前置准备</h3>
-<ul>
-<li>以管理员身份打开命令提示符（CMD）</li>
-<li>确保网络连接正常</li>
-</ul>
-<h3 id="执行激活命令">执行激活命令</h3>
-<h4 id="第一步设置-kms-服务器">第一步：设置 KMS 服务器</h4>
-<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
-    <div class="code-header language-cmd">
-        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
-        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
-        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">slmgr -skms skms.netnr.eu.org</span></span></code></pre></div></div>
-<p><strong>执行结果</strong>：<strong>密钥管理服务计算机名称成功设置</strong></p>
-<p></p>
-<h4 id="第二步安装产品密钥">第二步：安装产品密钥</h4>
-<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
-    <div class="code-header language-cmd">
-        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
-        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
-        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">slmgr -ipk DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ</span></span></code></pre></div></div>
-<p><strong>执行结果</strong>：<strong>产品密钥安装成功</strong></p>
-<p></p>]]></description></item></channel></rss>
+<p>不同 job 环境完全隔离，执行完毕立即销毁。如果把 build 和 deploy 分为两个 job，打包生成的 public 目录会丢失。</p>]]></description></item></channel></rss>
