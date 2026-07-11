@@ -1,0 +1,97 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Docker-System-Df - 标签 - CYBER ZEN</title><link>https://hex2rgb.github.io/tags/docker-system-df/</link><description>Docker-System-Df - 标签 - CYBER ZEN</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 10 Jul 2026 17:53:00 +0800</lastBuildDate><atom:link href="https://hex2rgb.github.io/tags/docker-system-df/" rel="self" type="application/rss+xml"/><item><title>Docker 磁盘空间分析与清理</title><link>https://hex2rgb.github.io/posts/docker-disk-cleanup/</link><pubDate>Fri, 10 Jul 2026 17:53:00 +0800</pubDate><author>Cyber Zen</author><guid>https://hex2rgb.github.io/posts/docker-disk-cleanup/</guid><description><![CDATA[<h2 id="磁盘占用概览">磁盘占用概览</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>root@Tower:~# docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          40        25        41.17GB   5.327GB (12%)
+Containers      25        22        1.641GB   98.8MB (6%)
+Local Volumes   58        6         2.034GB   1.998GB (98%)
+Build Cache     648       0         48.04GB   37.78GB</code></pre></div>
+<h2 id="分类清理明细">分类清理明细</h2>
+<table>
+  <thead>
+      <tr>
+          <th>分类</th>
+          <th>可回收空间</th>
+          <th>查询指令</th>
+          <th>清理指令</th>
+          <th>清理内容说明</th>
+          <th>风险</th>
+          <th>执行后减少的统计项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Build Cache</td>
+          <td>37.78GB</td>
+          <td><code>docker builder ls</code></td>
+          <td><code>docker builder prune -a</code></td>
+          <td>删除所有未关联镜像的构建分层缓存，解决反复 build 堆积占用</td>
+          <td>无风险，不影响容器/镜像运行</td>
+          <td>Build Cache</td>
+      </tr>
+      <tr>
+          <td>Images 悬空镜像 &lt;none&gt;</td>
+          <td>包含在 5.327GB 内</td>
+          <td><code>docker images -f dangling=true</code></td>
+          <td><code>docker image prune</code></td>
+          <td>仅清理无 TAG、构建残留的悬空镜像，保留有标签旧镜像</td>
+          <td>极低，不会删除正常镜像</td>
+          <td>Images</td>
+      </tr>
+      <tr>
+          <td>Images 全部闲置镜像</td>
+          <td>5.327GB</td>
+          <td><code>docker images</code></td>
+          <td><code>docker image prune -a</code></td>
+          <td>删除所有当前无容器使用的镜像（含悬空镜像、旧版本镜像）</td>
+          <td>中，历史旧镜像全部清除</td>
+          <td>Images</td>
+      </tr>
+      <tr>
+          <td>Containers</td>
+          <td>98.8MB</td>
+          <td><code>docker ps -a</code></td>
+          <td><code>docker container prune</code></td>
+          <td>删除所有已经停止退出的容器，仅保留运行中容器</td>
+          <td>低，不中断在线业务</td>
+          <td>Containers</td>
+      </tr>
+      <tr>
+          <td>Local Volumes</td>
+          <td>1.998GB</td>
+          <td><code>docker volume ls</code></td>
+          <td><code>docker volume prune</code></td>
+          <td>删除没有任何容器挂载的数据持久卷</td>
+          <td>高，卷内数据库/缓存文件会彻底丢失</td>
+          <td>Local Volumes</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="组合清理命令">组合清理命令</h2>
+<table>
+  <thead>
+      <tr>
+          <th>清理等级</th>
+          <th>命令</th>
+          <th>减少的统计项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>安全轻度清理</td>
+          <td><code>docker system prune</code></td>
+          <td>Images（悬空镜像）、Containers、Build Cache</td>
+      </tr>
+      <tr>
+          <td>深度完整清理</td>
+          <td><code>docker system prune -a --volumes</code></td>
+          <td>Images、Containers、Build Cache、Local Volumes</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="镜像闲置判定逻辑">镜像闲置判定逻辑</h2>
+<p>Docker 判断镜像是否闲置，只看有没有容器直接以该镜像为基础创建，不看分层继承关系。</p>]]></description></item></channel></rss>
